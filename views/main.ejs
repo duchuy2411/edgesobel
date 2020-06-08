@@ -1,0 +1,87 @@
+<!DOCTYPE html> 
+<title>Video/Canvas Demo 4</title> 
+<script> 
+
+document.addEventListener('DOMContentLoaded', function(){
+	    var v = document.getElementById('v');
+	    var canvas = document.getElementById('c');
+	    var context = canvas.getContext('2d');
+	    var back = document.createElement('canvas')
+	    var backcontext = back.getContext('2d');
+	 
+	    var cw,ch;
+	 
+	    v.addEventListener('play', function(){
+	        cw = v.clientWidth;
+	        ch = v.clientHeight;
+	        canvas.width = cw;
+	        canvas.height = ch;
+	        back.width = cw;
+	        back.height = ch;
+	        draw(v,context,backcontext,cw,ch);
+	    },false);
+	 
+	},false);
+
+	 
+
+
+	 
+	function draw(v,c,bc,cw,ch) {
+	    if(v.paused || v.ended) return false;
+	    
+	    bc.drawImage(v,0,0,cw,ch);
+	    
+	    var idata = bc.getImageData(0,0,cw,ch);
+	    var data = idata.data;
+	    var w = idata.width;
+	    var limit = data.length
+	    
+
+
+	    for(var i = 0; i < limit; i+=4) {
+
+	    	var gx = (data[i-4-w*4] + 2*data[i-w*4] + data[i+4-w*4]) - (data[i-4+w*4] + 2*data[i+w*4] + data[i+4+w*4]);
+	    	var gy = (data[i-w*4-4] + 2*data[i-4] + data[i+w*4-4]) - (data[i-w*4+4] + 2*data[i+4] + data[i+w*4+4]);
+	    	var g = Math.sqrt(gx**2 + gy**2);
+
+	        data[i] = data[i+1] = data[i+2] = g;
+	        data[i+3] = 255;
+	     
+	    }
+
+
+	    
+	    c.putImageData(idata,0,0);
+	    
+	    setTimeout(draw,20,v,c,bc,cw,ch);
+	}
+	
+
+
+</script> 
+ 
+<div class="container">
+<video class=id=v controls loop> 
+	<!-- <source src=video.webm type=video/webm> 
+	<source src=video.ogg type=video/ogg>  -->
+	<source src="/public/video.mp4" type=video/mp4> 
+</video> 
+
+<canvas id=c></canvas> 
+ </div>
+<style> 
+#c {
+	position: absolute;
+	top: 50%;
+	left: 40%;
+	margin: -180px 0 0 30px;
+}
+ 
+#v {
+	position: absolute;
+	top: 50%;
+	left: 40%;
+	margin: -180px 0 0 -530px;
+}
+</style> 
