@@ -9,7 +9,7 @@ app.use('/public', express.static(path.join(__dirname, 'public')))
 
 var urlencodeParser = bodyParser.urlencoded({extended: false}); 
 
-app.set('view engine', 'ejs');
+app.set('view engine', 'html');
 app.set('views', '/views');
 
 app.use('/', require('./controller/router'));
