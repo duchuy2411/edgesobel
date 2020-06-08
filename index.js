@@ -8,10 +8,8 @@ app.set('port', 8080);
 app.use('/public', express.static(path.join(__dirname, 'public')))
 
 var urlencodeParser = bodyParser.urlencoded({extended: false}); 
-
+app.engine('html', require('ejs').renderFile);
 app.set('view engine', 'html');
-app.set('views', '/views');
-
 app.use('/', require('./controller/router'));
 
 // Listen for requests  
