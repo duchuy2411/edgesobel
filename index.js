@@ -5,7 +5,7 @@ var bodyParser = require('body-parser');
 
 // Define the port to run on
 app.set('port', 8080);
-app.use('/public', express.static(path.join(__dirname, 'public')))
+app.use('', express.static(path.join(__dirname, '')));
 
 var urlencodeParser = bodyParser.urlencoded({extended: false}); 
 app.engine('html', require('ejs').renderFile);
